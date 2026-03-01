@@ -53,6 +53,18 @@ Object.defineProperty(globalThis, 'setMiddlewareOptions', {
   },
 })
 
+function initTgProxy() {
+  const handler: ProxyHandler<object> = {
+    get(_, prop) {
+      if (prop === Symbol.toPrimitive || prop === Symbol.toStringTag || prop === 'toString' || prop === 'valueOf') {
+        return undefined
+      }
+      throw new Error('You need to log in to use `tg`. Go to Settings > Accounts to add an account.')
+    },
+  }
+  window.tg = new Proxy({}, handler) as any
+}
+
 function initClient(accountId: string, verbose: boolean) {
   lastAccountId = accountId
 
@@ -144,10 +156,14 @@ window.addEventListener('message', async ({ data }) => {
     sendToChobitsu({ method: 'DOMStorage.enable' })
     sendToDevtools({ method: 'DOM.documentUpdated' })
 
-    initClient(data.accountId, data.verboseLogs)
+    if (data.accountId != null) {
+      initClient(data.accountId, data.verboseLogs)
+    } else {
+      initTgProxy()
+    }
     logUpdates = data.logUpdates
 
-    if (window.tg !== undefined) {
+    if (data.accountId != null && window.tg !== undefined) {
       window.tg.connect()
       window.tg.startUpdatesLoop()
     }
@@ -159,14 +175,10 @@ window.addEventListener('message', async ({ data }) => {
     currentScriptId = nanoid()
     await swInvokeMethodInner({ event: 'UPLOAD_SCRIPT', name: currentScriptId, files: data.files }, asNonNull(navigator.serviceWorker.controller))
 
-    if (!window.tg) {
-      // shouldnt happen but just in case
-      console.warn('[mtcute-repl] Telegram client not initialized yet')
-      return
-    }
-
-    if (lastConnectionState === 'offline') {
-      await window.tg.connect()
+    if (lastAccountId != null) {
+      if (lastConnectionState === 'offline') {
+        await window.tg.connect()
+      }
     }
 
     const el = document.createElement('script')
@@ -190,13 +202,20 @@ window.addEventListener('message', async ({ data }) => {
   } else if (data.event === 'FROM_DEVTOOLS') {
     chobitsu.sendRawMessage(data.value)
   } else if (data.event === 'ACCOUNT_CHANGED') {
-    window.tg?.close()
-    initClient(data.accountId, data.verboseLogs)
-
-    if (lastConnectionState !== 'offline') {
+    if (lastAccountId != null) {
+      window.tg?.close()
+    }
+    if (data.accountId != null) {
+      initClient(data.accountId, data.verboseLogs)
+      if (lastConnectionState !== 'offline') {
+        window.parent.postMessage({ event: 'CONNECTION_STATE', value: 'offline' }, HOST_ORIGIN)
+        window.tg.connect()
+        window.tg.startUpdatesLoop()
+      }
+    } else {
+      lastAccountId = undefined
+      initTgProxy()
       window.parent.postMessage({ event: 'CONNECTION_STATE', value: 'offline' }, HOST_ORIGIN)
-      window.tg.connect()
-      window.tg.startUpdatesLoop()
     }
   } else if (data.event === 'DISCONNECT') {
     // todo: we dont have a clean way to disconnect i think
