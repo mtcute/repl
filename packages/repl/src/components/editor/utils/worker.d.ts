@@ -11,7 +11,9 @@ declare module 'monaco-editor/esm/vs/language/typescript/ts.worker' {
     constructor(ctx: any, createData: any)
     getCompilationSettings(): ts.CompilerOptions
     getLanguageService(): ts.LanguageService
+    isDefaultLibFileName(fileName: string): boolean
     getSyntacticDiagnostics(fileName: string): Promise<ts.Diagnostic[]>
+    updateExtraLibs(extraLibs: Record<string, any>): Promise<void>
   }
 
   export function initialize(callback: (ctx: any, createData: any) => TypeScriptWorker): void

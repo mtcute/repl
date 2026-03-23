@@ -56,6 +56,7 @@ const compilerOptions = {
   target: ScriptTarget.ESNext,
   module: ModuleKind.ESNext,
   moduleResolution: 100, // Bundler — NodeJs (Node10) doesn't map .js→.d.ts for relative imports
+  resolvePackageJsonImports: false, // TS auto-import specifier code crashes here without baseUrl/paths; we don't use package.json#imports
   moduleDetection: 3, // force
   jsx: JsxEmit.Preserve,
   allowNonTsExtensions: true,
@@ -113,11 +114,12 @@ function registerDtsDefinitionProvider() {
         const workerFactory = await getTypeScriptWorker()
         const worker = await workerFactory(model.uri)
         const offset = model.getOffsetAt(position)
+        const currentFileName = model.uri.toString(true)
 
-        const results = await worker.getDeepDefinition(model.uri.toString(), offset)
+        const results = await worker.getDeepDefinition(currentFileName, offset)
         if (!results?.length) return null
 
-        const crossFile = results.filter((r: any) => r.fileName !== model.uri.toString())
+        const crossFile = results.filter((r: any) => r.fileName !== currentFileName)
         if (!crossFile.length) return null
 
         // ensure target models exist before returning (Monaco needs them for preview/navigation)
