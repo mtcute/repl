@@ -1,13 +1,12 @@
 import { asNonNull, asyncPool, utf8 } from '@fuman/utils'
 import { wireTmGrammars } from 'monaco-editor-textmate'
-import { editor, languages } from 'monaco-editor/esm/vs/editor/editor.api.js'
+import { editor, languages, Uri } from 'monaco-editor/esm/vs/editor/editor.api.js'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import {
   getTypeScriptWorker,
   javascriptDefaults,
   JsxEmit,
   ModuleKind,
-  ModuleResolutionKind,
   ScriptTarget,
   typescriptDefaults,
 } from 'monaco-editor/esm/vs/language/typescript/monaco.contribution.js'
@@ -56,7 +55,7 @@ const compilerOptions = {
   strict: true,
   target: ScriptTarget.ESNext,
   module: ModuleKind.ESNext,
-  moduleResolution: ModuleResolutionKind.NodeJs,
+  moduleResolution: 100, // Bundler — NodeJs (Node10) doesn't map .js→.d.ts for relative imports
   moduleDetection: 3, // force
   jsx: JsxEmit.Preserve,
   allowNonTsExtensions: true,
@@ -100,8 +99,50 @@ export async function setupMonaco() {
 
   registerImportCompletions(libs)
   registerAutoImportProvider()
+  registerDtsDefinitionProvider()
 
   await wireTmGrammars({ languages } as any, registry, grammars)
+}
+
+function registerDtsDefinitionProvider() {
+  languages.registerDefinitionProvider('typescript', {
+    async provideDefinition(model, position) {
+      if (!model.uri.path.includes('/node_modules/')) return null
+
+      try {
+        const workerFactory = await getTypeScriptWorker()
+        const worker = await workerFactory(model.uri)
+        const offset = model.getOffsetAt(position)
+
+        const results = await worker.getDeepDefinition(model.uri.toString(), offset)
+        if (!results?.length) return null
+
+        const crossFile = results.filter((r: any) => r.fileName !== model.uri.toString())
+        if (!crossFile.length) return null
+
+        // ensure target models exist before returning (Monaco needs them for preview/navigation)
+        for (const r of crossFile) {
+          const uri = Uri.parse(r.fileName)
+          if (!editor.getModel(uri)) {
+            const content = await worker.readFile(r.fileName)
+            if (content) editor.createModel(content, 'typescript', uri)
+          }
+        }
+
+        return crossFile.map((r: any) => ({
+          uri: Uri.parse(r.fileName),
+          range: {
+            startLineNumber: r.startLine,
+            startColumn: r.startCol,
+            endLineNumber: r.endLine,
+            endColumn: r.endCol,
+          },
+        }))
+      } catch {
+        return null
+      }
+    },
+  })
 }
 
 function registerAutoImportProvider() {

@@ -2,11 +2,11 @@ import type { EditorTab } from '../../store/tabs.ts'
 import clsx from 'clsx'
 import { LucidePlus, LucideX } from 'lucide-solid'
 import { nanoid } from 'nanoid'
-import { batch, createSignal, For } from 'solid-js'
+import { batch, createSignal, For, Show } from 'solid-js'
 import { Button } from '../../lib/components/ui/button.tsx'
 import { Tabs, TabsIndicator, TabsList, TabsTrigger } from '../../lib/components/ui/tabs.tsx'
 import { cn } from '../../lib/utils.ts'
-import { $activeTab, $tabs } from '../../store/tabs.ts'
+import { $activeTab, $ephemeralTab, $tabs, EPHEMERAL_TAB_ID } from '../../store/tabs.ts'
 import { useStore } from '../../store/use-store.ts'
 
 export interface EditorTabsProps {
@@ -16,6 +16,7 @@ export interface EditorTabsProps {
 export function EditorTabs(props: EditorTabsProps) {
   const tabs = useStore($tabs)
   const activeTab = useStore($activeTab)
+  const ephemeralTab = useStore($ephemeralTab)
 
   const [renamingTabId, setRenamingTabId] = createSignal<string | undefined>(undefined)
 
@@ -169,6 +170,31 @@ export function EditorTabs(props: EditorTabsProps) {
         <For each={tabs()}>
           {renderTab}
         </For>
+        <Show when={ephemeralTab()}>
+          {eph => (
+            <TabsTrigger
+              value={EPHEMERAL_TAB_ID}
+              class="flex w-fit flex-row items-center gap-1 pl-2 pr-1 italic opacity-75"
+              onClick={() => $activeTab.set(EPHEMERAL_TAB_ID)}
+            >
+              <div>{eph().fileName}</div>
+              <Button
+                variant="ghost"
+                size="icon"
+                class="size-5"
+                onClick={(event: MouseEvent) => {
+                  event.stopPropagation()
+                  $ephemeralTab.set(null)
+                  if (activeTab() === EPHEMERAL_TAB_ID) {
+                    $activeTab.set(tabs()[0].id)
+                  }
+                }}
+              >
+                <LucideX size="0.75rem" />
+              </Button>
+            </TabsTrigger>
+          )}
+        </Show>
         <Button
           variant="ghost"
           size="icon"

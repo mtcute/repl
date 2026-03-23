@@ -2,7 +2,7 @@ import { useColorModeValue } from '@kobalte/core'
 import { KeyCode, KeyMod, editor as mEditor, Uri } from 'monaco-editor'
 
 import { createEffect, on, onMount } from 'solid-js'
-import { $activeTab, $tabs, type EditorTab } from '../../store/tabs.ts'
+import { $activeTab, $ephemeralTab, $tabs, type EditorTab, EPHEMERAL_TAB_ID } from '../../store/tabs.ts'
 import { useStore } from '../../store/use-store.ts'
 import { setupMonaco } from './utils/setup.ts'
 import './Editor.css'
@@ -34,6 +34,16 @@ function findChangedTab(a: EditorTab[], b: EditorTab[]) {
   return null
 }
 
+function revealPosition(ed: mEditor.IStandaloneCodeEditor, pos: { lineNumber: number, column: number } & Record<string, unknown>) {
+  if ('endLineNumber' in pos) {
+    ed.setSelection(pos as any)
+    ed.revealRangeInCenter(pos as any)
+  } else {
+    ed.setPosition(pos as any)
+    ed.revealPositionInCenter(pos as any)
+  }
+}
+
 export default function Editor(props: EditorProps) {
   const tabs = useStore($tabs)
   const activeTab = useStore($activeTab)
@@ -43,6 +53,7 @@ export default function Editor(props: EditorProps) {
 
   const monacoTheme = useColorModeValue('latte', 'mocha')
   const modelsByTab = new Map<string, mEditor.ITextModel>()
+  let ephemeralModel: mEditor.ITextModel | null = null
 
   onMount(async () => {
     editor = mEditor.create(ref, {
@@ -96,6 +107,36 @@ export default function Editor(props: EditorProps) {
       localStorage.setItem(LOCAL_STORAGE_PREFIX + currentTab.id, content)
     })
 
+    mEditor.registerEditorOpener({
+      openCodeEditor(_source: any, resource: any, selectionOrPosition: any) {
+        if (!editor) return false
+
+        // check if it's a playground file
+        for (const [tabId, model] of modelsByTab) {
+          if (model.uri.toString() === resource.toString()) {
+            $activeTab.set(tabId)
+            if (selectionOrPosition) revealPosition(editor, selectionOrPosition)
+            return true
+          }
+        }
+
+        // open as ephemeral read-only tab
+        const model = mEditor.getModel(resource)
+        if (!model) return false
+
+        ephemeralModel = model
+        const path = resource.path.replace(/^\/node_modules\//, '')
+        $ephemeralTab.set({ fileName: path, uri: resource.toString() })
+        $activeTab.set(EPHEMERAL_TAB_ID)
+
+        editor.setModel(model)
+        editor.updateOptions({ readOnly: true })
+        if (selectionOrPosition) revealPosition(editor, selectionOrPosition)
+
+        return true
+      },
+    })
+
     return () => editor?.dispose()
   })
 
@@ -106,9 +147,19 @@ export default function Editor(props: EditorProps) {
 
   createEffect(on(activeTab, (tabId) => {
     if (!editor) return
+
+    if (tabId === EPHEMERAL_TAB_ID) {
+      if (ephemeralModel) {
+        editor.setModel(ephemeralModel)
+        editor.updateOptions({ readOnly: true })
+      }
+      return
+    }
+
     const model = modelsByTab.get(tabId)
     if (!model) return
     editor.setModel(model)
+    editor.updateOptions({ readOnly: false })
   }))
 
   createEffect(on(tabs, (tabs, prevTabs) => {

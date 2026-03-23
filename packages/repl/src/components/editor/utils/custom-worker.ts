@@ -3,6 +3,103 @@ import { initialize, ts, TypeScriptWorker } from 'monaco-editor/esm/vs/language/
 import { blankSourceFile } from 'ts-blank-space'
 
 class CustomTypeScriptWorker extends TypeScriptWorker {
+  // extra libs use `@` but Monaco URIs use `%40`. TS program uses identity for
+  // canonical file names, so both encodings coexist as "different" files.
+  // fix: make ALL paths use %40 consistently, and normalize lookups to find @ content.
+  private _resolveText(path: string): string | undefined {
+    return (this as any)._getScriptText(path)
+      ?? (this as any)._getScriptText(decodeURIComponent(path))
+  }
+
+  private _resolveExtraLib(path: string): any {
+    const libs = (this as any)._extraLibs ?? {}
+    return libs[path] ?? libs[decodeURIComponent(path)]
+  }
+
+  getScriptFileNames(): string[] {
+    const allModels = (this as any)._ctx.getMirrorModels().map((m: any) => m.uri)
+    const models: string[] = allModels
+      .filter((uri: any) => !uri.path?.startsWith('/lib.'))
+      .map((uri: any) => uri.toString())
+
+    // encode extra lib keys to %40 so all paths in the program use the same encoding
+    const extraLibKeys: string[] = Object.keys((this as any)._extraLibs ?? {})
+    const encodedKeys = extraLibKeys.map((k: string) => k.replace(/\/@/g, '/%40'))
+
+    const modelSet = new Set(models)
+    const deduped = encodedKeys.filter((k: string) => !modelSet.has(k))
+    return [...models, ...deduped]
+  }
+
+  getScriptVersion(fileName: string): string {
+    const model = (this as any)._getModel(fileName)
+    if (model) return model.version.toString()
+    const lib = this._resolveExtraLib(fileName)
+    if (lib) return String(lib.version)
+    return '1'
+  }
+
+  getScriptSnapshot(fileName: string): any {
+    const text = this._resolveText(fileName)
+    if (text === undefined) return undefined
+    return {
+      getText: (start: number, end: number) => text.substring(start, end),
+      getLength: () => text.length,
+      getChangeRange: () => undefined,
+    }
+  }
+
+  fileExists(path: string): boolean {
+    return this._resolveText(path) !== undefined
+  }
+
+  readFile(path: string): string | undefined {
+    return this._resolveText(path)
+  }
+
+  // follow through import declarations in .d.ts files to the actual definition
+  async getDeepDefinition(fileName: string, position: number) {
+    try {
+      const ls = this.getLanguageService()
+      let results = ls.getDefinitionAtPosition(fileName, position)
+
+      // follow through up to 5 levels of re-exports
+      for (let depth = 0; results?.length && depth < 5; depth++) {
+        const sameFile = results.every((r: any) => r.fileName === fileName)
+        if (!sameFile) break
+
+        let found = false
+        for (const result of results) {
+          const deeper = ls.getDefinitionAtPosition(result.fileName, result.textSpan.start)
+          if (deeper?.some((d: any) => d.fileName !== fileName)) {
+            results = deeper
+            found = true
+            break
+          }
+        }
+        if (!found) break
+      }
+
+      if (!results?.length) return null
+
+      return results.map((r: any) => {
+        const sf = ls.getProgram()?.getSourceFile(r.fileName)
+        if (!sf) return null
+        const start = sf.getLineAndCharacterOfPosition(r.textSpan.start)
+        const end = sf.getLineAndCharacterOfPosition(r.textSpan.start + r.textSpan.length)
+        return {
+          fileName: r.fileName,
+          startLine: start.line + 1,
+          startCol: start.character + 1,
+          endLine: end.line + 1,
+          endCol: end.character + 1,
+        }
+      }).filter(Boolean)
+    } catch {
+      return null
+    }
+  }
+
   // built-in SuggestAdapter uses this, local completions only
   async getCompletionsAtPosition(fileName: string, position: number) {
     return this.getLanguageService().getCompletionsAtPosition(fileName, position, {

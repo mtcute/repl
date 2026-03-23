@@ -30,6 +30,5 @@ declare module 'monaco-editor/esm/vs/language/typescript/monaco.contribution.js'
 
   export const ScriptTarget: { ESNext: number }
   export const ModuleKind: { ESNext: number }
-  export const ModuleResolutionKind: { NodeJs: number }
   export const JsxEmit: { Preserve: number }
 }

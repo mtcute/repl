@@ -19,3 +19,6 @@ export const $tabs = persistentAtom<EditorTab[]>('repl:tabs', [
 })
 
 export const $activeTab = atom('main')
+
+export const EPHEMERAL_TAB_ID = '__ephemeral__'
+export const $ephemeralTab = atom<{ fileName: string, uri: string } | null>(null)
