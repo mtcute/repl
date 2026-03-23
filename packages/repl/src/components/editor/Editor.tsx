@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@kobalte/core'
 import { KeyCode, KeyMod, editor as mEditor, Uri } from 'monaco-editor'
 
-import { createEffect, on, onMount } from 'solid-js'
+import { createEffect, on, onCleanup, onMount } from 'solid-js'
 import { $activeTab, $ephemeralTab, $tabs, type EditorTab, EPHEMERAL_TAB_ID } from '../../store/tabs.ts'
 import { useStore } from '../../store/use-store.ts'
 import { setupMonaco } from './utils/setup.ts'
@@ -54,6 +54,55 @@ export default function Editor(props: EditorProps) {
   const monacoTheme = useColorModeValue('latte', 'mocha')
   const modelsByTab = new Map<string, mEditor.ITextModel>()
   let ephemeralModel: mEditor.ITextModel | null = null
+
+  interface NavEntry { uri: string, viewState: mEditor.ICodeEditorViewState | null }
+  const navBack: NavEntry[] = []
+  const navForward: NavEntry[] = []
+
+  function saveNavState(): NavEntry | null {
+    if (!editor) return null
+    const model = editor.getModel()
+    if (!model) return null
+    return { uri: model.uri.toString(), viewState: editor.saveViewState() }
+  }
+
+  function restoreNavEntry(entry: NavEntry) {
+    if (!editor) return
+
+    // find which tab/model this entry belongs to
+    for (const [tabId, model] of modelsByTab) {
+      if (model.uri.toString() === entry.uri) {
+        $activeTab.set(tabId)
+        if (entry.viewState) editor.restoreViewState(entry.viewState)
+        return
+      }
+    }
+
+    // ephemeral model
+    const model = mEditor.getModel(Uri.parse(entry.uri))
+    if (!model) return
+    ephemeralModel = model
+    const path = Uri.parse(entry.uri).path.replace(/^\/node_modules\//, '')
+    $ephemeralTab.set({ fileName: path, uri: entry.uri })
+    $activeTab.set(EPHEMERAL_TAB_ID)
+    editor.setModel(model)
+    editor.updateOptions({ readOnly: true })
+    if (entry.viewState) editor.restoreViewState(entry.viewState)
+  }
+
+  function navigateBack() {
+    if (!navBack.length) return
+    const current = saveNavState()
+    if (current) navForward.push(current)
+    restoreNavEntry(navBack.pop()!)
+  }
+
+  function navigateForward() {
+    if (!navForward.length) return
+    const current = saveNavState()
+    if (current) navBack.push(current)
+    restoreNavEntry(navForward.pop()!)
+  }
 
   onMount(async () => {
     editor = mEditor.create(ref, {
@@ -111,6 +160,13 @@ export default function Editor(props: EditorProps) {
       openCodeEditor(_source: any, resource: any, selectionOrPosition: any) {
         if (!editor) return false
 
+        // save current state before navigating
+        const prev = saveNavState()
+        if (prev) {
+          navBack.push(prev)
+          navForward.length = 0
+        }
+
         // check if it's a playground file
         for (const [tabId, model] of modelsByTab) {
           if (model.uri.toString() === resource.toString()) {
@@ -136,6 +192,18 @@ export default function Editor(props: EditorProps) {
         return true
       },
     })
+
+    // Cmd+[ / Cmd+] for navigation history
+    editor.addCommand(KeyMod.CtrlCmd | KeyCode.BracketLeft, () => navigateBack())
+    editor.addCommand(KeyMod.CtrlCmd | KeyCode.BracketRight, () => navigateForward())
+
+    // mouse back/forward — must be on window to prevent browser navigation
+    const onMouseUp = (e: MouseEvent) => {
+      if (e.button === 3) { e.preventDefault(); navigateBack() }
+      if (e.button === 4) { e.preventDefault(); navigateForward() }
+    }
+    window.addEventListener('mouseup', onMouseUp)
+    onCleanup(() => window.removeEventListener('mouseup', onMouseUp))
 
     return () => editor?.dispose()
   })
