@@ -73,7 +73,7 @@ export async function setupMonaco() {
 
     for (const file of files) {
       const { path, contents } = file
-      if (!path.endsWith('.d.ts')) continue
+      if (!path.endsWith('.d.ts') && path !== 'package.json') continue
 
       extraLibs.push({ content: utf8.decoder.decode(contents), filePath: `file:///node_modules/${lib}/${path}` })
     }
