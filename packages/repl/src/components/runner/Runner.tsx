@@ -5,7 +5,8 @@ import type { CustomTypeScriptWorker } from '../editor/utils/custom-worker.ts'
 import { timers } from '@fuman/utils'
 import { persistentAtom } from '@nanostores/persistent'
 import { LucideCheck, LucidePlay, LucidePlug, LucideRefreshCw, LucideSettings2, LucideSkull, LucideUnplug } from 'lucide-solid'
-import { languages, Uri } from 'monaco-editor/esm/vs/editor/editor.api.js'
+import { Uri } from 'monaco-editor/esm/vs/editor/editor.api.js'
+import { getTypeScriptWorker } from 'monaco-editor/esm/vs/language/typescript/monaco.contribution.js'
 import { createEffect, createSignal, on, onCleanup, onMount } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import { Button } from '../../lib/components/ui/button.tsx'
@@ -181,8 +182,8 @@ export function Runner(props: {
   }, { defer: true }))
 
   async function handleRun() {
-    const getWorker = await languages.typescript.getTypeScriptWorker()
-    const worker = await getWorker(Uri.parse('file:///main.ts')) as unknown as CustomTypeScriptWorker
+    const workerFactory = await getTypeScriptWorker()
+    const worker = await workerFactory(Uri.parse('file:///main.ts')) as unknown as CustomTypeScriptWorker
 
     const tabs = $tabs.get()
     const processed = await Promise.all(tabs.map(tab => worker.processFile(`file:///${tab.fileName}`, tab.main)))

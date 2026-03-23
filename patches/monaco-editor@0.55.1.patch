@@ -1,0 +1,26 @@
+diff --git a/dev/vs/assets/ts.worker-ClNbeHrN.js b/dev/vs/assets/ts.worker-ClNbeHrN.js
+index 35bf44308c673aa517b9d0651b9b667e7dce7c9d..b5c916a22463affbbbe587cf2e383ccc3054ade8 100644
+--- a/dev/vs/assets/ts.worker-ClNbeHrN.js
++++ b/dev/vs/assets/ts.worker-ClNbeHrN.js
+@@ -29855,7 +29855,7 @@ ${lanes.join("\n")}
+     }
+     var resolvingEmptyArray = [];
+     var externalHelpersModuleNameText = "tslib";
+-    var defaultMaximumTruncationLength = 160;
++    var defaultMaximumTruncationLength = 16000;
+     var noTruncationMaximumTruncationLength = 1e6;
+     var defaultHoverMaximumTruncationLength = 500;
+     function getDeclarationOfKind(symbol, kind) {
+diff --git a/esm/vs/language/typescript/lib/typescriptServices.js b/esm/vs/language/typescript/lib/typescriptServices.js
+index 2b1e09c02f659c56059faf6ea794b4846d469677..cb2733650701c0bfecf203212902389e0ac950cd 100644
+--- a/esm/vs/language/typescript/lib/typescriptServices.js
++++ b/esm/vs/language/typescript/lib/typescriptServices.js
+@@ -16218,7 +16218,7 @@ ${lanes.join("\n")}
+   }
+   var resolvingEmptyArray = [];
+   var externalHelpersModuleNameText = "tslib";
+-  var defaultMaximumTruncationLength = 160;
++  var defaultMaximumTruncationLength = 16000;
+   var noTruncationMaximumTruncationLength = 1e6;
+   var defaultHoverMaximumTruncationLength = 500;
+   function getDeclarationOfKind(symbol, kind) {

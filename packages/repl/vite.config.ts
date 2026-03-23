@@ -10,6 +10,12 @@ export default defineConfig((env): UserConfig => {
   }
 
   return {
+    resolve: {
+      alias: {
+        // make ts-blank-space use monaco's bundled typescript instead of its own
+        'typescript': join(__dirname, 'src/components/editor/utils/typescript-shim.ts'),
+      },
+    },
     define: {
       'import.meta.env.BUILD_VERSION': JSON.stringify(new Date()),
     },

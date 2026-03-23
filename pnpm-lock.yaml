@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  monaco-editor@0.52.0:
-    hash: etwqtd55ssq6d52kxjt3dxlzre
-    path: patches/monaco-editor@0.52.0.patch
+  monaco-editor@0.55.1:
+    hash: efv6pbhiu6krkmaodargf2tshq
+    path: patches/monaco-editor@0.55.1.patch
 
 importers:
 
@@ -116,14 +116,14 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       monaco-editor:
-        specifier: 0.52.0
-        version: 0.52.0(patch_hash=etwqtd55ssq6d52kxjt3dxlzre)
+        specifier: 0.55.1
+        version: 0.55.1(patch_hash=efv6pbhiu6krkmaodargf2tshq)
       monaco-editor-core:
-        specifier: 0.52.0
-        version: 0.52.0
+        specifier: 0.55.1
+        version: 0.55.1
       monaco-editor-textmate:
         specifier: ^4.0.0
-        version: 4.0.0(monaco-editor@0.52.0(patch_hash=etwqtd55ssq6d52kxjt3dxlzre))(monaco-textmate@3.0.1(onigasm@2.2.5))
+        version: 4.0.0(monaco-editor@0.55.1(patch_hash=efv6pbhiu6krkmaodargf2tshq))(monaco-textmate@3.0.1(onigasm@2.2.5))
       monaco-textmate:
         specifier: ^3.0.1
         version: 3.0.1(onigasm@2.2.5)
@@ -155,8 +155,8 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3(solid-js@1.9.4)
       ts-blank-space:
-        specifier: ^0.4.4
-        version: 0.4.4
+        specifier: ^0.7.0
+        version: 0.7.0
     devDependencies:
       '@types/md5':
         specifier: ^2.3.5
@@ -1255,6 +1255,9 @@ packages:
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
 
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
+
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
 
@@ -1557,6 +1560,9 @@ packages:
   doctrine@3.0.0:
     resolution: {integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==}
     engines: {node: '>=6.0.0'}
+
+  dompurify@3.2.7:
+    resolution: {integrity: sha512-WhL/YuveyGXJaerVlMYGWhvQswa7myDG17P7Vu65EWC05o8vfeNbvNf4d/BOvH99+ZW+LlQsc1GDKMa1vNK6dw==}
 
   dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
@@ -2140,6 +2146,11 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
+  marked@14.0.0:
+    resolution: {integrity: sha512-uIj4+faQ+MgHgwUW1l2PsPglZLOLOT1uErt06dAPtx2kjteLAkbsd/0FiYg/MGS+i7ZKLb7w2WClxHkzOOuryQ==}
+    engines: {node: '>= 18'}
+    hasBin: true
+
   md5@2.3.0:
     resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
 
@@ -2290,8 +2301,8 @@ packages:
   mlly@1.7.3:
     resolution: {integrity: sha512-xUsx5n/mN0uQf4V548PKQ+YShA4/IW0KI1dZhrNrPCLG+xizETbHTkOa1f8/xut9JRPp8kQuMnz0oqwkTiLo/A==}
 
-  monaco-editor-core@0.52.0:
-    resolution: {integrity: sha512-Ur6BNCVgBcmOc4ZizEBl+rGiYtuozztOi4fgRFnAV64sRgKOxkwC1RxGfvJa3pHedoJ2eepV8Frjnr4PbhLcYA==}
+  monaco-editor-core@0.55.1:
+    resolution: {integrity: sha512-UTk7U9VkSFy2qruSYC70+vHHo5DffN164QGkDn4vTaaO40a1UMSNHVqS2MF6Z+s0LWOeAzez/Kp85oAPZG2d0g==}
 
   monaco-editor-textmate@4.0.0:
     resolution: {integrity: sha512-Clwup5LJzVfwURQrS+odSEC5/hZBEG36pQnvBKt4OtBndF8r2xLeXUZcK/AqEBK2u0Npy7frFp9hG7m66Ol9hA==}
@@ -2299,8 +2310,8 @@ packages:
       monaco-editor: 0.x.x
       monaco-textmate: ^3.0.0
 
-  monaco-editor@0.52.0:
-    resolution: {integrity: sha512-OeWhNpABLCeTqubfqLMXGsqf6OmPU6pHM85kF3dhy6kq5hnhuVS1p3VrEW/XhWHc71P2tHyS5JFySD8mgs1crw==}
+  monaco-editor@0.55.1:
+    resolution: {integrity: sha512-jz4x+TJNFHwHtwuV9vA9rMujcZRb0CEilTEwG2rRSpe/A7Jdkuj8xPKttCgOh+v/lkHy7HsZ64oj+q3xoAFl9A==}
 
   monaco-textmate@3.0.1:
     resolution: {integrity: sha512-ZxxY3OsqUczYP1sGqo97tu+CJmMBwuSW+dL0WEBdDhOZ5G1zntw72hvBc68ZQAirosWvbDKgN1dL5k173QtFww==}
@@ -2772,8 +2783,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-blank-space@0.4.4:
-    resolution: {integrity: sha512-G6GkD6oEJ7j5gG2e5qAizfE4Ap7JXMpnN0CEp9FEt4LExdaqsdwB90aQsaAwcKhiSxVk5KoqFW9xfxTQ4lBUnQ==}
+  ts-blank-space@0.7.0:
+    resolution: {integrity: sha512-1D9ytD3K9QGGWJWFslEeQFvIwiOlj8rS3s+WA45DAHxqtvnyc+vzg2C8OLjoOyQKMgLrzndEcR5TNWsVC4daLQ==}
     engines: {node: '>=18.0.0'}
 
   ts-interface-checker@0.1.13:
@@ -3841,6 +3852,9 @@ snapshots:
 
   '@types/semver@7.5.8': {}
 
+  '@types/trusted-types@2.0.7':
+    optional: true
+
   '@types/unist@3.0.3': {}
 
   '@typescript-eslint/eslint-plugin@8.19.1(@typescript-eslint/parser@8.19.1(eslint@9.11.0(jiti@1.21.7))(typescript@5.7.3))(eslint@9.11.0(jiti@1.21.7))(typescript@5.7.3)':
@@ -4156,6 +4170,10 @@ snapshots:
   doctrine@3.0.0:
     dependencies:
       esutils: 2.0.3
+
+  dompurify@3.2.7:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
 
   dotenv@16.4.7: {}
 
@@ -4844,6 +4862,8 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
+  marked@14.0.0: {}
+
   md5@2.3.0:
     dependencies:
       charenc: 0.0.2
@@ -5173,14 +5193,20 @@ snapshots:
       pkg-types: 1.3.0
       ufo: 1.5.4
 
-  monaco-editor-core@0.52.0: {}
-
-  monaco-editor-textmate@4.0.0(monaco-editor@0.52.0(patch_hash=etwqtd55ssq6d52kxjt3dxlzre))(monaco-textmate@3.0.1(onigasm@2.2.5)):
+  monaco-editor-core@0.55.1:
     dependencies:
-      monaco-editor: 0.52.0(patch_hash=etwqtd55ssq6d52kxjt3dxlzre)
+      dompurify: 3.2.7
+      marked: 14.0.0
+
+  monaco-editor-textmate@4.0.0(monaco-editor@0.55.1(patch_hash=efv6pbhiu6krkmaodargf2tshq))(monaco-textmate@3.0.1(onigasm@2.2.5)):
+    dependencies:
+      monaco-editor: 0.55.1(patch_hash=efv6pbhiu6krkmaodargf2tshq)
       monaco-textmate: 3.0.1(onigasm@2.2.5)
 
-  monaco-editor@0.52.0(patch_hash=etwqtd55ssq6d52kxjt3dxlzre): {}
+  monaco-editor@0.55.1(patch_hash=efv6pbhiu6krkmaodargf2tshq):
+    dependencies:
+      dompurify: 3.2.7
+      marked: 14.0.0
 
   monaco-textmate@3.0.1(onigasm@2.2.5):
     dependencies:
@@ -5654,7 +5680,7 @@ snapshots:
     dependencies:
       typescript: 5.7.3
 
-  ts-blank-space@0.4.4:
+  ts-blank-space@0.7.0:
     dependencies:
       typescript: 5.7.3
 

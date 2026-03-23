@@ -78,7 +78,7 @@ export default function Editor(props: EditorProps) {
 
     for (const tab of tabs()) {
       const storedCode = localStorage.getItem(LOCAL_STORAGE_PREFIX + tab.id)
-      const model = mEditor.createModel(storedCode ?? (tab.main ? DEFAULT_CODE : ''), 'typescript', Uri.parse(`file:///${tab.id}.ts`))
+      const model = mEditor.createModel(storedCode ?? (tab.main ? DEFAULT_CODE : ''), 'typescript', Uri.parse(`file:///${tab.fileName}`))
       modelsByTab.set(tab.id, model)
     }
 

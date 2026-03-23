@@ -3,6 +3,40 @@ import { initialize, ts, TypeScriptWorker } from 'monaco-editor/esm/vs/language/
 import { blankSourceFile } from 'ts-blank-space'
 
 class CustomTypeScriptWorker extends TypeScriptWorker {
+  // built-in SuggestAdapter uses this, local completions only
+  async getCompletionsAtPosition(fileName: string, position: number) {
+    return this.getLanguageService().getCompletionsAtPosition(fileName, position, {
+      includeCompletionsWithInsertText: true,
+      includeCompletionsForImportStatements: true,
+    })
+  }
+
+  // custom provider uses these for auto-import completions
+  async getAutoImportCompletions(fileName: string, position: number) {
+    const result = this.getLanguageService().getCompletionsAtPosition(fileName, position, {
+      includeCompletionsForModuleExports: true,
+      includeCompletionsWithInsertText: true,
+      includeCompletionsForImportStatements: true,
+    })
+    if (!result) return undefined
+    return {
+      ...result,
+      entries: result.entries.filter((e: any) => e.source),
+    }
+  }
+
+  async getAutoImportDetails(fileName: string, position: number, name: string, source: string, data: any) {
+    return this.getLanguageService().getCompletionEntryDetails(
+      fileName,
+      position,
+      name,
+      undefined,
+      source,
+      { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true },
+      data,
+    )
+  }
+
   async processFile(uri: string, withExports?: boolean) {
     const sourceFile = this.getLanguageService().getProgram()?.getSourceFile(uri)
     if (!sourceFile) throw new Error(`File not found: ${uri}`)
