@@ -44,7 +44,7 @@ Object.defineProperty(globalThis, 'setMiddlewareOptions', {
     if (JSON.stringify(options) === JSON.stringify(lastMiddlewareOptions)) return
     lastMiddlewareOptions = options
     if (window.tg) {
-      await window.tg.close()
+      await window.tg.destroy()
       initClient(lastAccountId!, verboseLogs)
       if (lastConnectionState !== 'offline') {
         await window.tg.connect()
@@ -203,7 +203,7 @@ window.addEventListener('message', async ({ data }) => {
     chobitsu.sendRawMessage(data.value)
   } else if (data.event === 'ACCOUNT_CHANGED') {
     if (lastAccountId != null) {
-      window.tg?.close()
+      await window.tg?.destroy()
     }
     if (data.accountId != null) {
       initClient(data.accountId, data.verboseLogs)
@@ -218,11 +218,7 @@ window.addEventListener('message', async ({ data }) => {
       window.parent.postMessage({ event: 'CONNECTION_STATE', value: 'offline' }, HOST_ORIGIN)
     }
   } else if (data.event === 'DISCONNECT') {
-    // todo: we dont have a clean way to disconnect i think
-    window.tg?.close()
-    if (lastAccountId) {
-      initClient(lastAccountId, data.verboseLogs)
-    }
+    await window.tg?.disconnect()
     window.parent.postMessage({ event: 'CONNECTION_STATE', value: 'offline' }, HOST_ORIGIN)
     lastConnectionState = 'offline'
   } else if (data.event === 'RECONNECT') {

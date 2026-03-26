@@ -80,11 +80,11 @@ importers:
         specifier: ^0.13.7
         version: 0.13.7(solid-js@1.9.4)
       '@mtcute/convert':
-        specifier: ^0.19.8
-        version: 0.19.8
+        specifier: ^0.29.4
+        version: 0.29.4
       '@mtcute/web':
-        specifier: ^0.19.5
-        version: 0.19.5
+        specifier: ^0.29.4
+        version: 0.29.4
       '@nanostores/persistent':
         specifier: ^0.10.2
         version: 0.10.2(nanostores@0.11.3)
@@ -186,11 +186,11 @@ importers:
         specifier: 0.0.4
         version: 0.0.4
       '@mtcute/convert':
-        specifier: ^0.19.8
-        version: 0.19.8
+        specifier: ^0.29.4
+        version: 0.29.4
       '@mtcute/web':
-        specifier: ^0.19.5
-        version: 0.19.5
+        specifier: ^0.29.4
+        version: 0.29.4
       '@nanostores/persistent':
         specifier: ^0.10.2
         version: 0.10.2(nanostores@0.11.3)
@@ -906,11 +906,17 @@ packages:
       zod:
         optional: true
 
+  '@fuman/io@0.0.19':
+    resolution: {integrity: sha512-B+2n3GVa9PCYMJ9xfsdXUlUV9yXO4gKLYfxm815PeJ+MGOw5TbEp166drRmBq1AtxVnP0efy6Oz9rYpKVODgow==}
+
   '@fuman/io@0.0.8':
     resolution: {integrity: sha512-+cRZ2JOMYceNQ2Rh6UYro5XVa11j29Sdd3Yhi4GfxAx6ZwCNIw3P80xcTRwCZSfMPLDNN9Etkq7NIc5v9lpItw==}
 
-  '@fuman/net@0.0.9':
-    resolution: {integrity: sha512-asn7VJbT8woVXAFCUMZrdyNZCSsXZclraeVZ6RYJ+T3RwQ+JfMMZtXLLTZ7XHrBPxk8x8hoHOJa/Fnyfm+ggbQ==}
+  '@fuman/net@0.0.19':
+    resolution: {integrity: sha512-yISM+JcZEWBpBYn0v2mUY/Zst4SsicTRaVTvRkVhMiZhgMzdXalfvRwRV/vsgwwL31bntwowCTDW4iilCJLbXg==}
+
+  '@fuman/utils@0.0.19':
+    resolution: {integrity: sha512-4qVrZ9AjKYztLJsNr1Tp7kL48b22dvVLN1iVW+Me8ZSQ0ILN0qknoxjsczVPReF7+GDWgknNxR2l6ggrA4SZyw==}
 
   '@fuman/utils@0.0.4':
     resolution: {integrity: sha512-YBZIlGDbM8s9G85pWFZJ9wQrDY4511XLHZ06/uxZfXBY0eSStwje8JFNmRMNF0SjRk4D3iRmPl9wirHKTkg89w==}
@@ -961,34 +967,28 @@ packages:
     peerDependencies:
       solid-js: ^1.8.8
 
-  '@mtcute/convert@0.19.8':
-    resolution: {integrity: sha512-lk3MG3mBIof/cVZ0cMCdQ+gBSgDHURNWzMO3KM/xvd5wCrKUkUMXoPYs4GWP/+BwFq0EBJw5DcpKMWR+0vP7nA==}
+  '@mtcute/convert@0.29.4':
+    resolution: {integrity: sha512-/91oAB5iqHlFfZTCshrANaKraE9M4SjJlA3VXjzR8z/TidatnaFkBtZ0EyQHlyL/NPwArj0KXpdFj3phL/zfYg==}
     peerDependencies:
-      '@mtcute/node': ^0.19.3
+      '@mtcute/node': ^0.29.4
     peerDependenciesMeta:
       '@mtcute/node':
         optional: true
 
-  '@mtcute/core@0.19.6':
-    resolution: {integrity: sha512-cBm8kdZglHm40nksF2wXn5RkKzlyo+9iJKi/mTk2fRRfCBgUSuP5f7l5OqA7HaJcwVRtbB46k9BLKs2H/jqhZg==}
+  '@mtcute/core@0.29.4':
+    resolution: {integrity: sha512-dEbuKvJp53jy533lXICd3c93IbL5iM5gi70lqzPtnS75MpBmufmMeKJqUEWsTXUmps3U6epmczCCbVz4+uweEA==}
 
-  '@mtcute/core@0.19.7':
-    resolution: {integrity: sha512-UX2AbXrA/rkOeEnJyImu4P3FeJr+dmjqE0GFY0QmbRcKCkzwYBAmEZ/LrzwEj1cajcSwn9dZkrjkNKs/XLhuRg==}
+  '@mtcute/file-id@0.29.0':
+    resolution: {integrity: sha512-kfNFKjdfFoo9YIl823EJ068u0djgK6MsqfIHIcb6iwmKOxnCFTLRvBGnJUaO+SbOejg63Tz5lzQxKnt03kEV6A==}
 
-  '@mtcute/file-id@0.19.0':
-    resolution: {integrity: sha512-r9r5JxchoVtYYMLPsf/wSnd5+KB4KmilWHywKQenf0DgKD+LCEN2FJpzY44RFE5dpy+eV5OHZ85zxA6EyYz/mA==}
+  '@mtcute/tl-runtime@0.29.0':
+    resolution: {integrity: sha512-VhDVYKYeC5TypdgzJ/6CtoZgwlR3h1xKatVTnuVcAe1sXrbIwju0EzZlPbUCjH6vgoOXyrJvkhUXdax/oSSjpg==}
 
-  '@mtcute/tl-runtime@0.19.0':
-    resolution: {integrity: sha512-5nqzQexx4/at+lWnd8G5zCsuI7k+vw/cr3IecRaZ+cOyNKLYQX9zqK2n6Lx+A9K1/M9L33YSAVPSPQnC+q0QjQ==}
+  '@mtcute/wasm@0.29.0':
+    resolution: {integrity: sha512-PFZ60ufUIt3BW1FFkCqcaEvEcezaTK+KyMVs3A/aXA19aFhDpu6HCSI8FJ6iOfGsIMGaNGYrwH3CZ7XxLn24XA==}
 
-  '@mtcute/tl@196.0.0':
-    resolution: {integrity: sha512-/FEoLfGk7VatEMkBWn4naRQnolodJX0CL0C2rPJr+gmhLSVMQs1a9HqLMIUFYRlEvZ4ayk4ujOWvF9G64xvW5g==}
-
-  '@mtcute/wasm@0.19.9':
-    resolution: {integrity: sha512-HFuZRWXW7dv2wNp7ePqW2AiJqaMtETQAQlGywJdWpM4dG+KpWarP0CvkOvvvvI1JbrDIw0jMoW3G4YP2WZnnFA==}
-
-  '@mtcute/web@0.19.5':
-    resolution: {integrity: sha512-NtO9fKGLobAbm+Nm3OAy0gmY1sphz+Rv+JbUGBoPKY6PQUuT2uBCoRvutoHraBZd91Y2hExHMg2juWHgmJ6QPg==}
+  '@mtcute/web@0.29.4':
+    resolution: {integrity: sha512-ZRvvcpWwBNDtlPaId3ui2KSB0QFCRipZgMkLEf9x2Pod8MzBQfaBFCdhe88NO37U5nksFTKy2VzsrkOnUZ/WzA==}
 
   '@nanostores/persistent@0.10.2':
     resolution: {integrity: sha512-BEndnLhRC+yP7gXTESepBbSj8XNl8OXK9hu4xAgKC7MWJHKXnEqJMqY47LUyHxK6vYgFnisyHmqq+vq8AUFyIg==}
@@ -2123,8 +2123,8 @@ packages:
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
-  long@5.2.3:
-    resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==}
 
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
@@ -3493,14 +3493,20 @@ snapshots:
       '@badrap/valita': 0.4.2
       zod: 3.24.1
 
+  '@fuman/io@0.0.19':
+    dependencies:
+      '@fuman/utils': 0.0.19
+
   '@fuman/io@0.0.8':
     dependencies:
       '@fuman/utils': 0.0.4
 
-  '@fuman/net@0.0.9':
+  '@fuman/net@0.0.19':
     dependencies:
-      '@fuman/io': 0.0.8
-      '@fuman/utils': 0.0.4
+      '@fuman/io': 0.0.19
+      '@fuman/utils': 0.0.19
+
+  '@fuman/utils@0.0.19': {}
 
   '@fuman/utils@0.0.4': {}
 
@@ -3565,57 +3571,42 @@ snapshots:
       '@solid-primitives/utils': 6.2.3(solid-js@1.9.4)
       solid-js: 1.9.4
 
-  '@mtcute/convert@0.19.8':
+  '@mtcute/convert@0.29.4':
     dependencies:
-      '@fuman/io': 0.0.8
-      '@fuman/net': 0.0.9
-      '@fuman/utils': 0.0.4
-      '@mtcute/core': 0.19.7
+      '@fuman/io': 0.0.19
+      '@fuman/net': 0.0.19
+      '@fuman/utils': 0.0.19
+      '@mtcute/core': 0.29.4
 
-  '@mtcute/core@0.19.6':
+  '@mtcute/core@0.29.4':
     dependencies:
-      '@fuman/io': 0.0.8
-      '@fuman/net': 0.0.9
-      '@fuman/utils': 0.0.4
-      '@mtcute/file-id': 0.19.0
-      '@mtcute/tl': 196.0.0
-      '@mtcute/tl-runtime': 0.19.0
+      '@fuman/io': 0.0.19
+      '@fuman/net': 0.0.19
+      '@fuman/utils': 0.0.19
+      '@mtcute/file-id': 0.29.0
+      '@mtcute/tl-runtime': 0.29.0
       '@types/events': 3.0.0
-      long: 5.2.3
+      long: 5.3.2
 
-  '@mtcute/core@0.19.7':
+  '@mtcute/file-id@0.29.0':
     dependencies:
-      '@fuman/io': 0.0.8
-      '@fuman/net': 0.0.9
-      '@fuman/utils': 0.0.4
-      '@mtcute/file-id': 0.19.0
-      '@mtcute/tl': 196.0.0
-      '@mtcute/tl-runtime': 0.19.0
-      '@types/events': 3.0.0
-      long: 5.2.3
+      '@fuman/utils': 0.0.19
+      '@mtcute/tl-runtime': 0.29.0
+      long: 5.3.2
 
-  '@mtcute/file-id@0.19.0':
+  '@mtcute/tl-runtime@0.29.0':
     dependencies:
-      '@fuman/utils': 0.0.4
-      '@mtcute/tl-runtime': 0.19.0
-      long: 5.2.3
+      '@fuman/utils': 0.0.19
+      long: 5.3.2
 
-  '@mtcute/tl-runtime@0.19.0':
+  '@mtcute/wasm@0.29.0': {}
+
+  '@mtcute/web@0.29.4':
     dependencies:
-      '@fuman/utils': 0.0.4
-      long: 5.2.3
-
-  '@mtcute/tl@196.0.0':
-    dependencies:
-      long: 5.2.3
-
-  '@mtcute/wasm@0.19.9': {}
-
-  '@mtcute/web@0.19.5':
-    dependencies:
-      '@fuman/net': 0.0.9
-      '@mtcute/core': 0.19.6
-      '@mtcute/wasm': 0.19.9
+      '@fuman/net': 0.0.19
+      '@fuman/utils': 0.0.19
+      '@mtcute/core': 0.29.4
+      '@mtcute/wasm': 0.29.0
 
   '@nanostores/persistent@0.10.2(nanostores@0.11.3)':
     dependencies:
@@ -4842,7 +4833,7 @@ snapshots:
 
   lodash@4.17.21: {}
 
-  long@5.2.3: {}
+  long@5.3.2: {}
 
   longest-streak@3.1.0: {}
 

@@ -73,7 +73,7 @@ export async function importAccount(
     client.onError.add((err) => {
       if (err instanceof TransportError && err.code === 404) {
         is404 = true
-        client.close()
+        client.destroy()
       }
     })
     await client.connect()
@@ -81,7 +81,7 @@ export async function importAccount(
     const self = await getMe(client)
     if (abortSignal.aborted) throw abortSignal.reason
 
-    await client.close()
+    await client.destroy()
 
     return {
       id: accountId,
@@ -92,7 +92,7 @@ export async function importAccount(
       dcId: asNonNull(session.primaryDcs).main.id,
     }
   } catch (e) {
-    await client.close()
+    await client.destroy()
     await deleteAccount(accountId)
     if (is404) {
       throw new Error('Invalid session (auth key not found)')

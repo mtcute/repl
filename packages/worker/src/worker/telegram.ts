@@ -32,7 +32,7 @@ function getTmpClient(accountId: string): [BaseTelegramClient, () => Promise<voi
     const accountInfo = $accounts.get().find(it => it.id === accountId)
     if (!accountInfo) throw new Error('Account not found')
     const tmpClient = createInternalClient(accountId, accountInfo.testMode, accountInfo.apiOptions)
-    return [tmpClient, () => tmpClient.close()]
+    return [tmpClient, () => tmpClient.destroy()]
   } else {
     return [client, () => Promise.resolve()]
   }
@@ -47,7 +47,7 @@ async function handleAuthSuccess(accountId: string, user: User) {
   const testMode = client.params.testMode ?? false
 
   if ($accounts.get().some(it => it.telegramId === user.id)) {
-    await client.close()
+    await client.destroy()
     await deleteAccount(accountId)
     throw new Error(`Account already exists (user ID: ${user.id})`)
   }
@@ -66,7 +66,7 @@ async function handleAuthSuccess(accountId: string, user: User) {
   ])
   $activeAccountId.set(accountId)
 
-  await client.close()
+  await client.destroy()
 
   return account
 }
@@ -87,7 +87,7 @@ export class ReplWorkerTelegram {
   }) {
     const client = clients.get(params.accountId)
     if (!client) return
-    await client.close()
+    await client.destroy()
     clients.delete(params.accountId)
 
     if (params.forget) {
@@ -367,7 +367,7 @@ export class ReplWorkerTelegram {
       $activeAccountId.set(filteredAccounts[0]?.id ?? null)
     }
 
-    await client.close()
+    await client.destroy()
     clients.delete(params.accountId)
     await deleteAccount(params.accountId)
 
